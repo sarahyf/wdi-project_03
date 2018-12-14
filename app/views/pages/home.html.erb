@@ -1,2 +1,43 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<% if user_signed_in? %>
+<form action="">
+    <input type="text" name="taskName" id="taskName" placeholder="Task Name">
+
+    <input type="text" name="projectName" id="projectName" placeholder="What is the project">
+
+    <input type="time" name="startTime" id="startTime">
+    <input type="time" name="endTime" id="endTime">
+
+   <!-- <input type="submit" name="taskDone" id="taskDone" value="Done"> -->
+   <button id="submit">Done</button>
+
+   <div>
+
+   <div id="auto">
+        <p id="timer"></p>
+        <button id="start_task">Start</button>
+   </div>
+
+    <% s = 0 %>
+    <% e = 0 %>
+    <% m1 = 0 %>
+    <% m2 = 0 %>
+
+    <% current_user.projects.each do |p| %>
+        <p><%= p.name %></p>
+        <% p.tasks.each do |t| %>
+        <p><%= t.name %></p>
+        <p><%= s = t.start_time.strftime "%I:%M %P" %></p>
+        <p><%= e = t.end_time.strftime "%I:%M %P" %></p>
+
+        <p><% m1 = t.start_time.strftime "%M" %></p>
+        <p><% m2 = t.end_time.strftime "%M" %></p>
+
+        <p>Duration: <%= e.to_i - s.to_i %>:<%= m2.to_i - m1.to_i if m2 > m1 || m2 == m1 %><%= m1.to_i - m2.to_i if m1 > m2 %></p>
+        
+        <% end %>
+        <hr>
+    <% end %>
+   </div>
+  
+</form>
+<% end %>
