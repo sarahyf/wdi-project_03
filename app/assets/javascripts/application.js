@@ -15,6 +15,11 @@
 //= require turbolinks
 //= require_tree .
 
+let projectName = "";
+let taskName = "";
+let startTime = "";
+let endTime = "";
+
 function responseToJson(response) {
     return response.json();
 }
@@ -50,25 +55,72 @@ function addNewTask(taskName, startTime, endTime, projectId) {
         });
 }
 
+function getAllProjects() {
+    fetch("/projects", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+        }
+    })
+        .then(responseToJson)
+        .then(projectLists);
+}
+
+function projectLists(data) {
+    let check = false;
+    console.log(data);
+    data.forEach(function(element) {
+        console.log(element);
+        console.log(element.name);
+        console.log(projectName.value);
+        if (element["name"] === projectName.value) {
+            addNewTask(taskName.value, startTime.value, endTime.value, element.id);
+            check = true;
+            throw BreakException;
+        }
+    });
+    if (check === false)
+    addNewProject(projectName.value, taskName.value, startTime.value, endTime.value);
+}
+
 window.onload = function() {
-    const taskName = document.querySelector("#taskName");
-    const projectName = document.querySelector("#projectName");
-    const startTime = document.querySelector("#startTime");
-    const endTime = document.querySelector("#endTime");
-    const submit = document.querySelector("#submit");
+    taskName = document.querySelector("#taskName");
+    projectName = document.querySelector("#projectName");
+    startTime = document.querySelector("#startTime");
+    endTime = document.querySelector("#endTime");
+    submit = document.querySelector("#submit");
 
     const auto = document.querySelector("#start_task");
     const timer = document.querySelector("#timer");
 
-    auto.addEventListener("click", function (e) { 
-        e.preventDefault();
-        timer.innerHTML = new Date;
-     });
+    let check = false;
+
+    // auto.addEventListener("click", function (e) { 
+    //     e.preventDefault();
+    //     timer.innerHTML = new Date;
+    //  });
 
     // if(submit) {
         submit.addEventListener("click", function(e) {
             // e.preventDefault();
-            addNewProject(projectName.value, taskName.value, startTime.value, endTime.value);
+
+            getAllProjects();
+
+            // projectNames.forEach(function(element) {
+            //     console.log(element);
+            //     console.log(element.name);
+            //     if (element["name"] === projectName) {
+            //         addNewTask(taskName.value, startTime.value, endTime.value, element.id);
+            //         check = true;
+            //     }
+            // });
+
+
+
+            // if (check === false) {
+            //     addNewProject(projectName.value, taskName.value, startTime.value, endTime.value);
+            // }
             // addNewTask(taskName.value, startTime.value, endTime.value);
 
         });

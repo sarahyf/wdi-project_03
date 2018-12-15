@@ -2,6 +2,12 @@ class ProjectsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
+    @projects = Project.all
+
+    respond_to do |f|
+      f.html
+      f.json { render json: @projects }
+    end
   end
 
   def show

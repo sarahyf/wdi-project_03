@@ -9,35 +9,84 @@
 
    <!-- <input type="submit" name="taskDone" id="taskDone" value="Done"> -->
    <button id="submit">Done</button>
+</form>
 
-   <div>
-
+<!--
    <div id="auto">
         <p id="timer"></p>
         <button id="start_task">Start</button>
    </div>
+   -->
 
-    <% s = 0 %>
-    <% e = 0 %>
-    <% m1 = 0 %>
-    <% m2 = 0 %>
+    <% tasks_array = [] %>
 
     <% current_user.projects.each do |p| %>
-        <p><%= p.name %></p>
         <% p.tasks.each do |t| %>
-        <p><%= t.name %></p>
-        <p><%= s = t.start_time.strftime "%I:%M %P" %></p>
-        <p><%= e = t.end_time.strftime "%I:%M %P" %></p>
-
-        <p><% m1 = t.start_time.strftime "%M" %></p>
-        <p><% m2 = t.end_time.strftime "%M" %></p>
-
-        <p>Duration: <%= e.to_i - s.to_i %>:<%= m2.to_i - m1.to_i if m2 > m1 || m2 == m1 %><%= m1.to_i - m2.to_i if m1 > m2 %></p>
-        
+        <% tasks_array.push(t) %>
         <% end %>
-        <hr>
     <% end %>
-   </div>
   
-</form>
+
+<!--.created_at.strftime "%B %d, %Y" -->
+   <% while tasks_array.empty? == false %>
+        <% total_hours = 0 %>
+        <% total_minutes = 0 %>
+        <% total_seconds = 0 %>
+
+   <div>
+   <p><%= tasks_array[0].created_at.strftime "%B %d, %Y" %> &nbsp; &nbsp; &nbsp; <%= total_hours %>:<%= total_minutes %>:<%= total_seconds %></p>
+        <% test = tasks_array[0] %>
+        <% check = true %>
+        <%= project_name = "" %>
+      
+      <% while check == true %>
+        <!-- <p><%= tasks_array[0].created_at.strftime "%B %d, %Y" %> &nbsp; &nbsp; &nbsp; <%= total_hours %>:<%= total_minutes %>:<%= total_seconds %></p> -->
+
+       <% first_element = tasks_array.shift %>
+
+        <% if (first_element.created_at.strftime "%B %d, %Y") == (test.created_at.strftime "%B %d, %Y") %>
+            <% current_user.projects.each do |p| %>
+                <% project_name = p.name if p.id == first_element.project_id %>
+            <% end %>
+
+            <strong><%= first_element.name %> / <%= project_name %></strong>
+
+            <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<%= s = first_element.start_time.strftime "%I:%M %P" %>-<%= e = first_element.end_time.strftime "%I:%M %P" %></strong>
+
+            <% m1 = first_element.start_time.strftime "%M" %>
+            <% m2 = first_element.end_time.strftime "%M" %>
+
+            <% s1 = first_element.start_time.strftime "%S" %>
+            <% s2 = first_element.end_time.strftime "%S" %>
+
+            <% hours = e.to_i - s.to_i if e > s || e == s %>
+            <% hours = s.to_i - e.to_i if s > e %>
+            <% hours = "0#{hours}" if hours < 10 %>
+
+            <% minutes = m2.to_i - m1.to_i if m2 > m1 || m2 == m1 %>
+            <% minutes = m1.to_i - m2.to_i if m1 > m2 %>
+            <% minutes = "0#{minutes}" if minutes < 10 %>
+
+            <% seconds = s2.to_i - s1.to_i if s2 > s1 || s2 == s1 %>
+            <% seconds = s1.to_i - s2.to_i if s1 > s2 %>
+            <% seconds = "0#{seconds}" if seconds < 10 %>
+
+            <strong>&nbsp; &nbsp;<%= hours %>:<%= minutes %>:<%= seconds %></strong>
+
+            <% total_hours = total_hours + hours.to_i %>
+            <% total_minutes = total_minutes + minutes.to_i %>
+            <% total_seconds = total_seconds + seconds.to_i %>
+
+            <hr>
+            
+                <% check = false if tasks_array.empty? %>    
+      
+        <% else %>
+            <% tasks_array.unshift first_element %>
+            <% check = false %>
+        <% end %>
+        <% end %>
+        <% end %>
+   </div>
+
 <% end %>
