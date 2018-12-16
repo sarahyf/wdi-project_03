@@ -11,7 +11,9 @@ class TasksController < ApplicationController
   end
 
   def create
-    task = Task.create(name: params["name"], start_time: params["start_time"], end_time: params["end_time"], project_id: params["project_id"])
+    @task = Task.create(name: params["name"], start_time: params["start_time"], end_time: params["end_time"], project_id: params["project_id"])
+    duration = Task.calculate_duration(@task)
+    @task.update(duration: duration)
     render json: task
   end
 

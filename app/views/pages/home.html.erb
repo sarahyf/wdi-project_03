@@ -19,29 +19,48 @@
    -->
 
     <% tasks_array = [] %>
-   
+    <% hours = 0 %>
+    <% minutes = 0 %>
+    <% seconds = 0  %>
 
     <% current_user.projects.each do |p| %>
         <% p.tasks.each do |t| %>
         <% tasks_array.push(t) %>
+            <% seconds = seconds + (t.duration[6..7]).to_i %>
+            <% minutes = minutes + (t.duration[3..4]).to_i %>
+            <% hours = hours + (t.duration[0..1]).to_i %>
         <% end %>
     <% end %>
+
+    <% if seconds >= 60 %>
+        <% rest = seconds %>
+        <% seconds = seconds - 60 %>
+        <% rest = rest - seconds %>
+        <% minutes = minutes + (rest / 60) %>
+    <% end %>
+
+    <% if minutes >= 60 %>
+        <% rest = minutes %>
+        <% minutes = minutes - 60 %>
+        <% rest = rest - minutes %>
+        <% hours = hours + (rest / 60) %>
+    <% end %>
+
+    <% seconds = "0#{seconds}" if seconds < 10 %>
+    <% minutes = "0#{minutes}" if minutes < 10 %>
+    <% hours = "0#{hours}" if hours < 10 %>
   
 
 <!--.created_at.strftime "%B %d, %Y" -->
    <% while tasks_array.empty? == false %>
-        <% total_hours = 0 %>
-        <% total_minutes = 0 %>
-        <% total_seconds = 0 %>
 
    <div>
-   <p><%= tasks_array[0].created_at.strftime "%B %d, %Y" %> &nbsp; &nbsp; &nbsp; <%= total_hours %>:<%= total_minutes %>:<%= total_seconds %></p>
+   <p><%= tasks_array[0].created_at.strftime "%B %d, %Y" %> &nbsp; &nbsp; &nbsp; <%= "#{hours}:#{minutes}:#{seconds}" %></p>
         <% test = tasks_array[0] %>
         <% check = true %>
         <%= project_name = "" %>
       
       <% while check == true %>
-        <!-- <p><%= tasks_array[0].created_at.strftime "%B %d, %Y" %> &nbsp; &nbsp; &nbsp; <%= total_hours %>:<%= total_minutes %>:<%= total_seconds %></p> -->
 
        <% first_element = tasks_array.shift %>
 
@@ -52,150 +71,7 @@
 
             <strong><%= first_element.name %> / <%= project_name %></strong>
 
-            <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<%= first_element.start_time.strftime "%I:%M %P" %>-<%= first_element.end_time.strftime "%I:%M %P" %></strong>
-
-            <% counter = 0 %>
-            <% am = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] %>
-            <% pm = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] %>
-
-            <%= s = first_element.start_time.strftime "%l" %>
-            <%= e = first_element.end_time.strftime "%l" %>
-
-            <% calculate = false %>
-
-            <% if (first_element.start_time.strftime "%P") == "am" && (first_element.end_time.strftime "%P") == "am" %>
-                <% am.each do |h| %>
-                    <% if h.to_i == s.to_i %>
-                        <% calculate = true %>
-                    <% end %>
-                    <% if calculate == true %>
-                        <% counter = counter + 1 %>
-                    <% end %>
-                    <% if h.to_i == e.to_i %>
-                        <% calculate = false %>
-                    <% end %>
-                <% end %>
-            <% end %>
-
-            <% if (first_element.start_time.strftime "%l") > (first_element.end_time.strftime "%l") %>
-                <% pm.each do |h| %>
-                    <% if calculate == true %>
-                        <% counter = counter + 1 %>
-                    <% end %>
-                    
-                <% end %>
-
-                <% am.each do |h| %>
-                    <% if calculate == true %>
-                        <% counter = counter + 1 %>
-                    <% end %>
-                    <% if h.to_i == e.to_i %>
-                        <% calculate = false %>
-                    <% end %>
-                <% end %>
-            <% end %>
-
-            
-            <!-- ********************* -->
-            <% if (first_element.start_time.strftime "%P") == "pm" && (first_element.end_time.strftime "%P") == "pm" %>
-                <% pm.each do |h| %>
-                    <% if h.to_i == s.to_i %>
-                        <% calculate = true %>
-                    <% end %>
-                    <% if calculate == true %>
-                        <% counter = counter + 1 %>
-                    <% end %>
-                    <% if h.to_i == e.to_i %>
-                        <% calculate = false %>
-                    <% end %>
-                <% end %>
-            <% end %>
-
-            <% if (first_element.start_time.strftime "%l") > (first_element.end_time.strftime "%l") %>
-                <% am.each do |h| %>
-                    <% if calculate == true %>
-                        <% counter = counter + 1 %>
-                    <% end %>
-                    
-                <% end %>
-
-                <% pm.each do |h| %>
-                    <% if calculate == true %>
-                        <% counter = counter + 1 %>
-                    <% end %>
-                    <% if h.to_i == e.to_i %>
-                        <% calculate = false %>
-                    <% end %>
-                <% end %>
-            <% end %>
-
-            <!-- ****************** -->
-            <% if (first_element.start_time.strftime "%P") == "am" && (first_element.end_time.strftime "%P") == "pm" %>
-                <% am.each do |h| %>
-                    <% if h.to_i == s.to_i %>
-                        <% calculate = true %>
-                    <% end %>
-                    <% if calculate == true %>
-                        <% counter = counter + 1 %>
-                    <% end %>
-                <% end %>
-
-                <% pm.each do |h| %>
-                    <% if calculate == true %>
-                        <% counter = counter + 1 %>
-                    <% end %>
-                    <% if h.to_i == e.to_i %>
-                        <% calculate = false %>
-                    <% end %>
-                <% end %>
-            <% end %>
-
-            <% if (first_element.start_time.strftime "%P") == "pm" && (first_element.end_time.strftime "%P") == "am" %>
-                <% pm.each do |h| %>
-                    <% if h.to_i == s.to_i %>
-                        <% calculate = true %>
-                    <% end %>
-                    <% if calculate == true %>
-                        <% counter = counter + 1 %>
-                    <% end %>
-                <% end %>
-
-                <% am.each do |h| %>
-                    <% if calculate == true %>
-                        <% counter = counter + 1 %>
-                    <% end %>
-                    <% if h.to_i == e.to_i %>
-                        <% calculate = false %>
-                    <% end %>
-                <% end %>
-            <% end %>
-
-            <% m1 = first_element.start_time.strftime "%M" %>
-            <% m2 = first_element.end_time.strftime "%M" %>
-
-            <% s1 = first_element.start_time.strftime "%S" %>
-            <% s2 = first_element.end_time.strftime "%S" %>
-
-           <!-- <% hours = e.to_i - s.to_i if e > s || e == s %>
-            <% hours = s.to_i - e.to_i if s > e %> 
-            <% hours = "0#{counter}" if hours < 10 %> -->
-            
-            <% hours = "#{counter - 1}" %>
-            <% hours = "0#{counter - 1}" if hours.to_i < 10 %>
-
-            <% minutes = m2.to_i - m1.to_i if m2 > m1 || m2 == m1 %>
-            <% minutes = m1.to_i - m2.to_i if m1 > m2 %>
-            <% minutes = "0#{minutes}" if minutes < 10 %>
-
-            <% seconds = s2.to_i - s1.to_i if s2 > s1 || s2 == s1 %>
-            <% seconds = s1.to_i - s2.to_i if s1 > s2 %>
-            <% seconds = "0#{seconds}" if seconds < 10 %>
-
-            <strong>&nbsp; &nbsp;<%= hours %>:<%= minutes %>:<%= seconds %></strong>
-
-            <% total_hours = total_hours + hours.to_i %>
-            <% total_minutes = total_minutes + minutes.to_i %>
-            <% total_seconds = total_seconds + seconds.to_i %>
+            <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<%= first_element.start_time.strftime "%I:%M %P" %>-<%= first_element.end_time.strftime "%I:%M %P" %> &nbsp; &nbsp; &nbsp; Duration: <%= first_element.duration %></strong>
 
             <hr>
             
@@ -207,6 +83,7 @@
         <% end %>
         <% end %>
         <% end %>
+            
    </div>
 
 <% end %>
