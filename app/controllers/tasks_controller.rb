@@ -2,6 +2,8 @@ class TasksController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
+    @tasks = current_user.tasks
+    @data = Task.report @tasks
   end
 
   def show

@@ -101,7 +101,7 @@ window.onload = function() {
     //     timer.innerHTML = new Date;
     //  });
 
-    // if(submit) {
+    if(submit) {
         submit.addEventListener("click", function(e) {
             // e.preventDefault();
 
@@ -124,5 +124,5 @@ window.onload = function() {
             // addNewTask(taskName.value, startTime.value, endTime.value);
 
         });
-    // }
+    }
 };

@@ -26,33 +26,33 @@
     <% current_user.projects.each do |p| %>
         <% p.tasks.each do |t| %>
         <% tasks_array.push(t) %>
-            <% seconds = seconds + (t.duration[6..7]).to_i %>
-            <% minutes = minutes + (t.duration[3..4]).to_i %>
-            <% hours = hours + (t.duration[0..1]).to_i %>
+            
         <% end %>
     <% end %>
 
-    <% if seconds >= 60 %>
-        <% rest = seconds %>
-        <% seconds = seconds - 60 %>
-        <% rest = rest - seconds %>
-        <% minutes = minutes + (rest / 60) %>
-    <% end %>
-
-    <% if minutes >= 60 %>
-        <% rest = minutes %>
-        <% minutes = minutes - 60 %>
-        <% rest = rest - minutes %>
-        <% hours = hours + (rest / 60) %>
-    <% end %>
-
-    <% seconds = "0#{seconds}" if seconds < 10 %>
-    <% minutes = "0#{minutes}" if minutes < 10 %>
-    <% hours = "0#{hours}" if hours < 10 %>
-  
+    
 
 <!--.created_at.strftime "%B %d, %Y" -->
-   <% while tasks_array.empty? == false %>
+<% while tasks_array.empty? == false %>
+
+   <% if seconds.to_i >= 60 %>
+        <% rest = seconds.to_i %>
+        <% seconds.to_i = seconds.to_i - 60 %>
+        <% rest = rest - seconds.to_i %>
+        <% minutes.to_i = minutes.to_i + (rest / 60) %>
+    <% end %>
+
+    <% if minutes.to_i >= 60 %>
+        <% rest = minutes.to_i %>
+        <% minutes = minutes.to_i - 60 %>
+        <% rest = rest - minutes.to_i %>
+        <% hours = hours.to_i + (rest / 60) %>
+    <% end %>
+
+    <% seconds = "0#{seconds}" if seconds.to_i < 10 %>
+    <% minutes = "0#{minutes}" if minutes.to_i < 10 %>
+    <% hours = "0#{hours}" if hours.to_i < 10 %>
+  
 
    <div>
    <p><%= tasks_array[0].created_at.strftime "%B %d, %Y" %> &nbsp; &nbsp; &nbsp; <%= "#{hours}:#{minutes}:#{seconds}" %></p>
@@ -68,6 +68,10 @@
             <% current_user.projects.each do |p| %>
                 <% project_name = p.name if p.id == first_element.project_id %>
             <% end %>
+
+            <% seconds = seconds.to_i + (first_element.duration[6..7]).to_i %>
+            <% minutes = minutes.to_i + (first_element.duration[3..4]).to_i %>
+            <% hours = hours.to_i + (first_element.duration[0..1]).to_i %>
 
             <strong><%= first_element.name %> / <%= project_name %></strong>
 

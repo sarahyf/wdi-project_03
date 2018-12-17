@@ -1,2 +1,29 @@
-<h1>Tasks#index</h1>
-<p>Find me in app/views/tasks/index.html.erb</p>
+<h1>Report</h1>
+
+<% @tasks.each do |t| %>
+<p><%= t.name %></p>
+<p><%= t.project_id %></p>
+<% end %>
+
+
+<div id="chart" style="width: auto; height: 600px;"></div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<%= javascript_tag do -%>
+  google.charts.load('current', {'packages':['bar']});
+  google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+    var data = JSON.parse('<%= @data.to_json.html_safe -%>');
+    data = [['Week/Day', 'Duration']].concat(data);
+    data = google.visualization.arrayToDataTable(data);
+    var options = {
+      chart: {
+        title: 'Duration',
+      }
+    };
+
+    var chart = new google.charts.Bar(document.getElementById('chart'));
+    chart.draw(data, google.charts.Bar.convertOptions(options));
+  }
+<% end -%>
