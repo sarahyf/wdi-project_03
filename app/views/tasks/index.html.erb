@@ -1,11 +1,3 @@
-<h1>Report</h1>
-
-<% @tasks.each do |t| %>
-<p><%= t.name %></p>
-<p><%= t.project_id %></p>
-<% end %>
-
-
 <div id="chart" style="width: auto; height: 600px;"></div>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -15,6 +7,15 @@
 
   function drawChart() {
     var data = JSON.parse('<%= @data.to_json.html_safe -%>');
+    data.map(function(time) {
+      hours = Math.floor(time[1] / 60);
+      minutes = time[1] % 60;
+      if (minutes < 10) {
+        minutes = "0" + minutes;
+      }
+      time[1] = parseFloat(`${hours}.${minutes}`);
+      return time;
+    });
     data = [['Week/Day', 'Duration']].concat(data);
     data = google.visualization.arrayToDataTable(data);
     var options = {
@@ -22,8 +23,18 @@
         title: 'Duration',
       }
     };
-
+    var view = new google.visualization.DataView(data);
     var chart = new google.charts.Bar(document.getElementById('chart'));
-    chart.draw(data, google.charts.Bar.convertOptions(options));
+    chart.draw(view, options);
   }
 <% end -%>
+
+    <%# .map(function(time) {
+      const hours = Math.floor(time[1] / 60);
+      let minutes = time[1] % 60;
+      if (minutes < 10) {
+        minutes = "0" + minutes;
+      }
+      time[2] = `${hours}:${minutes}`;
+      return time;
+    }); %>

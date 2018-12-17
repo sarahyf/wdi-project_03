@@ -195,7 +195,7 @@ class Task < ApplicationRecord
           # minutes = "0#{minutes}" if minutes.to_i < 10
           # hours = "0#{hours}" if hours.to_i < 10
 
-          day[:duration] = hours
+          day[:duration] = (hours * 60) + minutes
         end
       end
     end
@@ -213,7 +213,7 @@ class Task < ApplicationRecord
 
     week.map do |day|
       [
-        day[:day].strftime("%A %B %d, %Y"),
+        day[:day].strftime("%A"),
         day[:duration].to_i,
       ]
     end

@@ -1,4 +1,7 @@
 <% if user_signed_in? %>
+
+<%= link_to "Report", tasks_path %>
+
 <form action="">
     <input type="text" name="taskName" id="taskName" placeholder="Task Name">
 
@@ -54,7 +57,7 @@
     <% hours = "0#{hours}" if hours.to_i < 10 %>
   
 
-   <div>
+   <div id="tasks_days">
    <p><%= tasks_array[0].created_at.strftime "%B %d, %Y" %> &nbsp; &nbsp; &nbsp; <%= "#{hours}:#{minutes}:#{seconds}" %></p>
         <% test = tasks_array[0] %>
         <% check = true %>
@@ -86,8 +89,6 @@
             <% check = false %>
         <% end %>
         <% end %>
+           </div>
         <% end %>
-            
-   </div>
-
 <% end %>
