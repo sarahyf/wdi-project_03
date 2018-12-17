@@ -14,8 +14,119 @@
  *= require_self
  */
 
+body {
+    margin: 0%;
+}
 
- #tasks_days {
-     background-color: floralwhite;
-     
- }
+h1 {
+    margin: 0%;
+    text-align: center;
+    font-size: 70px;
+    background-color: darkred;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.session {
+    text-align: center;
+    margin: 0%;
+}
+
+.session div {
+    margin-top: 30px;
+}
+
+.session h2 {
+    font-size: 50px;
+}
+
+.session .inputs label {
+    font-size: 30px;
+}
+
+.session .inputs input[type=email] {
+    font-size: 30px;
+    width: 500px;
+    height: 50px;
+    border-radius: 10px;
+    outline: none;
+    margin-top: 10px;
+}
+
+.session .inputs input[type=password] {
+    font-size: 30px;
+    width: 500px;
+    height: 50px;
+    border-radius: 10px;
+    outline: none;
+    margin-top: 10px;
+}
+
+.session label {
+    font-size: 20px;
+    
+}
+
+.session input[type=submit] {
+    font-size: 30px;
+    width: 200px;
+    height: 50px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.session a {
+    font-size: 30px;
+    /* text-decoration: none; */
+    color: black;   
+}
+
+#create_task {
+    /* text-align: center; */
+    background-attachment: fixed;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+#create_task input[type=text] {
+    font-size: 20px;
+    border-radius: 10px;
+    width: 500px;
+    height: 50px;
+}
+
+#create_task input[type=time] {
+    font-size: 20px;
+    border-radius: 10px;
+    /* width: 500px; */
+    height: 50px;
+}
+
+#create_task button {
+    font-size: 20px;
+    width: 100px;
+    height: 50px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+
+#tasks_days {
+     background-color: floralwhite;    
+}
+
+#tasks_days .each_task {
+     display: flex;
+   flex-wrap: wrap;
+  align-content: space-between;
+
+}
+
+#tasks_days p {
+    font-size: 20px;
+}

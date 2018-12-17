@@ -2,17 +2,18 @@
 
 <%= link_to "Report", tasks_path %>
 
-<form action="">
-    <input type="text" name="taskName" id="taskName" placeholder="Task Name">
+<div id="create_task">
+    <form action="">
+        <input type="text" name="taskName" id="taskName" placeholder="Task Name">
 
-    <input type="text" name="projectName" id="projectName" placeholder="What is the project">
+        <input type="text" name="projectName" id="projectName" placeholder="Project Name">
 
-    <input type="time" name="startTime" id="startTime">
-    <input type="time" name="endTime" id="endTime">
+        <input type="time" name="startTime" id="startTime">
+        <input type="time" name="endTime" id="endTime">
 
-   <!-- <input type="submit" name="taskDone" id="taskDone" value="Done"> -->
-   <button id="submit">Done</button>
-</form>
+    <button id="submit">Done</button>
+    </form>
+</div>
 
 <!--
    <div id="auto">
@@ -33,10 +34,9 @@
         <% end %>
     <% end %>
 
-    
+    <% tasks_array = tasks_array.reverse %>
 
-<!--.created_at.strftime "%B %d, %Y" -->
-<% while tasks_array.empty? == false %>
+    <% while tasks_array.empty? == false %>
 
    <% if seconds.to_i >= 60 %>
         <% rest = seconds.to_i %>
@@ -58,7 +58,16 @@
   
 
    <div id="tasks_days">
-   <p><%= tasks_array[0].created_at.strftime "%B %d, %Y" %> &nbsp; &nbsp; &nbsp; <%= "#{hours}:#{minutes}:#{seconds}" %></p>
+
+    <% if (tasks_array[0].created_at.strftime "%B %d, %Y") == (Date.today.strftime "%B %d, %Y") %>
+        <p>Today</p>
+    <% elsif (tasks_array[0].created_at.strftime "%B %d, %Y") == ((Date.today + 1).strftime "%B %d, %Y") %>
+        <p>Yesterday</p>
+    <% else %>
+        <p><%= tasks_array[0].created_at.strftime "%B %d, %Y" %></p>
+    <% end %>
+
+  
         <% test = tasks_array[0] %>
         <% check = true %>
         <%= project_name = "" %>
@@ -76,12 +85,17 @@
             <% minutes = minutes.to_i + (first_element.duration[3..4]).to_i %>
             <% hours = hours.to_i + (first_element.duration[0..1]).to_i %>
 
-            <strong><%= first_element.name %> / <%= project_name %></strong>
+            <div class="each_task">
 
-            <strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<%= first_element.start_time.strftime "%I:%M %P" %>-<%= first_element.end_time.strftime "%I:%M %P" %> &nbsp; &nbsp; &nbsp; Duration: <%= first_element.duration %></strong>
+            <div><p class="to_left"><%= first_element.name %></p></div>
+                
+            <div><p class="to_canter"><%= project_name %></p></div>
 
-            <hr>
+            <div><p class="to_right"><%= first_element.start_time.strftime "%I:%M %P" %>-<%= first_element.end_time.strftime "%I:%M %P" %> &nbsp; &nbsp; &nbsp; Duration: <%= first_element.duration %></p></div>
             
+            </div>
+            <hr>
+
                 <% check = false if tasks_array.empty? %>    
       
         <% else %>
