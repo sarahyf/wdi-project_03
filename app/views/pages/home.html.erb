@@ -1,6 +1,9 @@
 <% if user_signed_in? %>
 
-<%= link_to "Report", tasks_path %>
+<div class="links">
+<p><%= link_to "Report", tasks_path %></p>
+<p><%= link_to "Log Out", destroy_user_session_path, method: :delete %></p>
+</div>
 
 <div id="create_task">
     <form action="">
@@ -15,27 +18,22 @@
     </form>
 </div>
 
-<!--
-   <div id="auto">
-        <p id="timer"></p>
-        <button id="start_task">Start</button>
-   </div>
-   -->
+<div>
+    <h3 id="timer">00: 00: 00</h3>
+    <button id="toggle">Start</button>
+</div>
 
     <% tasks_array = [] %>
     <% hours = 0 %>
     <% minutes = 0 %>
     <% seconds = 0  %>
 
-    <% current_user.projects.each do |p| %>
-        <% p.tasks.each do |t| %>
+    <% current_user.tasks.each do |t| %>
         <% tasks_array.push(t) %>
-            
-        <% end %>
     <% end %>
 
     <% tasks_array = tasks_array.reverse %>
-
+    
     <% while tasks_array.empty? == false %>
 
    <% if seconds.to_i >= 60 %>
@@ -55,16 +53,15 @@
     <% seconds = "0#{seconds}" if seconds.to_i < 10 %>
     <% minutes = "0#{minutes}" if minutes.to_i < 10 %>
     <% hours = "0#{hours}" if hours.to_i < 10 %>
-  
 
-   <div id="tasks_days">
+   <div id="day_tasks">
 
     <% if (tasks_array[0].created_at.strftime "%B %d, %Y") == (Date.today.strftime "%B %d, %Y") %>
-        <p>Today</p>
-    <% elsif (tasks_array[0].created_at.strftime "%B %d, %Y") == ((Date.today + 1).strftime "%B %d, %Y") %>
-        <p>Yesterday</p>
+        <p class="day">Today</p>
+    <% elsif (tasks_array[0].created_at.strftime "%B %d, %Y") == ((Date.today - 1).strftime "%B %d, %Y") %>
+        <p class="day">Yesterday</p>
     <% else %>
-        <p><%= tasks_array[0].created_at.strftime "%B %d, %Y" %></p>
+        <p class="day"><%= tasks_array[0].created_at.strftime "%B %d, %Y" %></p>
     <% end %>
 
   
@@ -87,13 +84,18 @@
 
             <div class="each_task">
 
-            <div><p class="to_left"><%= first_element.name %></p></div>
-                
-            <div><p class="to_canter"><%= project_name %></p></div>
+            <div><p><%= first_element.name %></p></div>
+                            
+            <% if project_name == "No Project"%>
+                <div><p id="no_project"><%= project_name %></p></div>
+            <% else %>
+                <div><p><%= project_name %></p></div>
+            <% end %>
 
-            <div><p class="to_right"><%= first_element.start_time.strftime "%I:%M %P" %>-<%= first_element.end_time.strftime "%I:%M %P" %> &nbsp; &nbsp; &nbsp; Duration: <%= first_element.duration %></p></div>
-            
+            <div><p><%= first_element.start_time.strftime "%I:%M %P" %> - <%= first_element.end_time.strftime "%I:%M %P" %> &nbsp; &nbsp; &nbsp; <%= first_element.duration %></p></div>
+
             </div>
+
             <hr>
 
                 <% check = false if tasks_array.empty? %>    
@@ -102,6 +104,7 @@
             <% tasks_array.unshift first_element %>
             <% check = false %>
         <% end %>
+
         <% end %>
            </div>
         <% end %>

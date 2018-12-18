@@ -5,16 +5,15 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata|PT+Sans|Raleway|ZCOOL+XiaoWei" rel="stylesheet">    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <h1>Time Tracker</h1>
-  <%= link_to "Log In", new_user_session_path %> 
-  <%= link_to "Sign Up", new_user_registration_path %>
-  <%= link_to "Log Out", destroy_user_session_path, method: :delete %>
+    <h1>Time Tracker</h1>    
     <%= yield %>
-    
   </body>
 </html>

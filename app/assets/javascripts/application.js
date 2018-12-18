@@ -12,13 +12,84 @@
 //
 //= require rails-ujs
 //= require activestorage
-//= require turbolinks
 //= require_tree .
 
 let projectName = "";
 let taskName = "";
 let startTime = "";
 let endTime = "";
+
+/*********Stopwatch*********/
+
+function stopwatch(element) {
+    var time = 0;
+    var interval;
+    var offset;
+
+    function update() {
+        time += 1;
+        var formatedTime = timeFormatter(time);
+        element.innerHTML = formatedTime;
+    }
+
+    // function delta() {
+    //     var now = Date.now();
+    //     var timePassed = now - offset;
+    //     offset = now;
+    //     return timePassed;
+    // }
+
+    // seconds 
+    // minutes = seconds * 60
+    // hours = minutes * 60
+
+    function timeFormatter(timeInSeconds) {
+        var hours = Math.floor(timeInSeconds / 60 / 60) % 60;
+        var minutes = Math.floor(timeInSeconds / 60) % 60;
+        var seconds = timeInSeconds % 60;
+
+        if (hours < 10) {
+            hours = "0" + hours;
+        }
+
+        if (minutes < 10) {
+            minutes = "0" + minutes;
+        }
+
+        if(seconds < 10) {
+            seconds = "0" + seconds;
+        }
+
+        // console.log(hours + ": " + minutes + ": " + seconds);
+
+        return hours + ": " + minutes + ": " + seconds;
+    }
+
+    this.isOn = false;
+
+    this.start = function() {
+        if(!this.isOn) {
+            interval = setInterval(update, 1000);
+            offset = Date.now();
+            this.isOn = true;
+            time2 = time;
+            time = 0
+            return time;
+        }
+    };
+    
+    this.stop = function() {
+        if(this.isOn) {
+            clearInterval(interval);
+            interval = null;
+            this.isOn = false;
+            time2 = time;
+            time = 0;
+            return time2;
+        }
+    };
+}
+/******************/
 
 function responseToJson(response) {
     return response.json();
@@ -51,7 +122,7 @@ function addNewTask(taskName, startTime, endTime, projectId) {
         body: JSON.stringify(params)
     }).then(responseToJson)
         .then(data => {
-            console.log(data);
+            location.refresh();
         });
 }
 
@@ -91,37 +162,56 @@ window.onload = function() {
     endTime = document.querySelector("#endTime");
     submit = document.querySelector("#submit");
 
-    const auto = document.querySelector("#start_task");
-    const timer = document.querySelector("#timer");
+    // var timer = document.getElementById("timer");
+    // var toggleBtn = document.getElementById("toggle");
 
-    let check = false;
+    // function toDB(timeInSeconds) {
+    //     var hours = Math.floor(timeInSeconds / 60 / 60) % 60;
+    //     var minutes = Math.floor(timeInSeconds / 60) % 60;
+    //     var seconds = timeInSeconds % 60;
 
-    // auto.addEventListener("click", function (e) { 
-    //     e.preventDefault();
-    //     timer.innerHTML = new Date;
-    //  });
+    //     if (hours < 10) {
+    //         hours = "0" + hours;
+    //     }
+
+    //     if (minutes < 10) {
+    //         minutes = "0" + minutes;
+    //     }
+
+    //     if (seconds < 10) {
+    //         seconds = "0" + seconds;
+    //     }
+
+    //     // console.log(hours + ": " + minutes + ": " + seconds);
+
+    //     return hours + ": " + minutes + ": " + seconds;
+    // }
+
+    // if (toggleBtn) {
+    //     var watch = new stopwatch(timer);
+
+    //     toggleBtn.addEventListener("click", function () {
+    //         if (watch.isOn) {
+    //             endTime = watch.stop();
+    //             // watch.stop();
+    //             console.log(endTime);
+    //             endTime = Date.now();
+    //             console.log(endTime);
+    //         } else {
+    //             // startTime = Date.now();
+    //             startTime = watch.start();
+    //             console.log(toDB(startTime));
+    //             startTime = Date.now();
+    //             console.log(startTime);
+    //         }
+    //     });
+    // }
 
     if(submit) {
         submit.addEventListener("click", function(e) {
-            // e.preventDefault();
+            // getAllProjects();
 
-            getAllProjects();
-
-            // projectNames.forEach(function(element) {
-            //     console.log(element);
-            //     console.log(element.name);
-            //     if (element["name"] === projectName) {
-            //         addNewTask(taskName.value, startTime.value, endTime.value, element.id);
-            //         check = true;
-            //     }
-            // });
-
-
-
-            // if (check === false) {
-            //     addNewProject(projectName.value, taskName.value, startTime.value, endTime.value);
-            // }
-            // addNewTask(taskName.value, startTime.value, endTime.value);
+            addNewProject(projectName.value, taskName.value, startTime.value, endTime.value);
 
         });
     }

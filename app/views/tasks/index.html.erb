@@ -1,4 +1,7 @@
-<%= link_to 'Back', root_path %>
+<div class="links">
+<p><%= link_to 'Back', root_path %></p>
+<p><%= link_to "Log Out", destroy_user_session_path, method: :delete %></p>
+</div>
 
 <div id="chart" style="width: auto; height: 600px;"></div>
 
