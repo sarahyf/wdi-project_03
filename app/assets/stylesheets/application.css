@@ -207,3 +207,7 @@ h1 {
     padding-right: 70px;
     padding-left: 70px;
 }
+
+button {
+    cursor: pointer;
+}
