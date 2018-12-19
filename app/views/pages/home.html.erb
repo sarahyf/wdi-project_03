@@ -11,17 +11,26 @@
 
         <input type="text" name="projectName" id="projectName" placeholder="Project Name">
 
-        <input type="time" name="startTime" id="startTime">
-        <input type="time" name="endTime" id="endTime">
+        <div id="select">
+            <button id="s_e">Start Time - End Time</button>
+            <button id="stopwatch">Stopwatch</button>
+        </div>
+        
+        <div id="show_s_e">
+            <input type="time" name="startTime" id="startTime">
+            <input type="time" name="endTime" id="endTime">
+        </div>
+
+        <div id="show_stopwatch">
+            <strong id="timer">00: 00: 00</strong>
+           <!-- <button id="toggle">Start</button> -->
+        </div>
 
     <button id="submit">Done</button>
     </form>
 </div>
 
-<div>
-    <h3 id="timer">00: 00: 00</h3>
-    <button id="toggle">Start</button>
-</div>
+
 
     <% tasks_array = [] %>
     <% hours = 0 %>

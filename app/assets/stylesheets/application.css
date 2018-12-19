@@ -134,7 +134,7 @@ h1 {
     font-family: 'PT Sans', sans-serif;
 }
 
-#create_task button {
+#create_task #submit {
     font-size: 20px;
     width: 100px;
     height: 50px;
@@ -171,5 +171,18 @@ h1 {
 
 #no_project {
     color: gray;
+}
+
+#select {
+    display: inline;
+}
+
+/******************/
+#show_s_e {
+    display: none;
+}
+
+#show_stopwatch {
+    display: none;
 }
 

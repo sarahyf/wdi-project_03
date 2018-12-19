@@ -45,6 +45,18 @@ function stopwatch(element) {
         var minutes = time.getMinutes().toString();
         var seconds = time.getSeconds().toString();
 
+        if (hours.length < 2) {
+            hours = "0" + hours;
+        }
+
+        if (minutes.length < 2) {
+            minutes = "0" + minutes;
+        }
+
+        if (seconds.length < 2) {
+            seconds = "0" + seconds;
+        }        
+
         return hours + ": " + minutes + ": " + seconds;
     }
 
@@ -55,9 +67,6 @@ function stopwatch(element) {
             interval = setInterval(update, 1000);
             offset = Date.now();
             this.isOn = true;
-            time2 = time;
-            time = 0
-            return time;
         }
     };
     
@@ -66,9 +75,7 @@ function stopwatch(element) {
             clearInterval(interval);
             interval = null;
             this.isOn = false;
-            time2 = time;
             time = 0;
-            return time2;
         }
     };
 }
@@ -148,7 +155,13 @@ window.onload = function() {
     var timer = document.getElementById("timer");
     var toggleBtn = document.getElementById("toggle");
 
+    startEndSelected = document.querySelector("#s_e");
+    stopwatchSelected = document.querySelector("#stopwatch");
+
+    var watch = null;
     var calculateTime = false;
+
+
 
     function toDB() {
         var time = new Date();
@@ -164,34 +177,68 @@ window.onload = function() {
         return format;
     }
 
-    var watch = null;
+    
 
-    if (toggleBtn) {
-        watch = new stopwatch(timer);
-
-        toggleBtn.addEventListener("click", function () {
-            calculateTime = true;
-            if (watch.isOn) {
-                endTime = watch.stop();
-                endTime = toDB(endTime);
-            } else {
-                startTime = watch.start();
-                startTime = toDB(startTime);
-            }
+    if (startEndSelected) {
+        startEndSelected.addEventListener("click", function (e) {
+        document.querySelector("#select").style.display = "none";
+        document.querySelector("#show_s_e").style.display = "inline";
+            e.preventDefault();
         });
     }
 
+    if (stopwatchSelected) {
+        calculateTime = true;
+
+        watch = new stopwatch(timer);
+
+        calculateTime = true;
+
+        stopwatchSelected.addEventListener("click", function (e) {
+            calculateTime = true;
+            document.querySelector("#select").style.display = "none";
+            document.querySelector("#show_stopwatch").style.display = "inline";
+            // watch = new stopwatch(timer);
+
+                // if (watch.isOn) {
+                //     endTime = watch.stop();
+                //     endTime = toDB(endTime);
+                // } else {
+                    watch.start();
+                    startTime = toDB();
+                // }
+
+            e.preventDefault();
+            calculateTime = true;
+        });
+        calculateTime = true;
+    }
+
+    // if (toggleBtn) {
+    //     watch = new stopwatch(timer);
+
+    //     toggleBtn.addEventListener("click", function () {
+    //         calculateTime = true;
+    //         if (watch.isOn) {
+    //             endTime = watch.stop();
+    //             endTime = toDB(endTime);
+    //         } else {
+    //             startTime = watch.start();
+    //             startTime = toDB(startTime);
+    //         }
+    //     });
+    // }
+
     if(submit) {
+        console.log(calculateTime);
         submit.addEventListener("click", function(e) {
-            if(calculateTime == true) {
-                endTime = watch.stop();
-                endTime = toDB(endTime);
+            if(calculateTime === true) {
+                watch.stop();
+                endTime = toDB();
 
                 addNewProject(projectName.value, taskName.value, startTime, endTime);
                 calculateTime = false;
             } else {
-                
-                
                 getAllProjects();
             }
         });
