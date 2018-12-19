@@ -134,6 +134,17 @@ h1 {
     font-family: 'PT Sans', sans-serif;
 }
 
+#create_task .select_time {
+    font-size: 17px;
+    width: 180px;
+    height: 50px;
+    border-radius: 10px;
+    margin-right: 5px;
+    margin-bottom: 20px;
+    font-family: 'PT Sans', sans-serif;
+    cursor: pointer;
+}
+
 #create_task #submit {
     font-size: 20px;
     width: 100px;
@@ -186,3 +197,13 @@ h1 {
     display: none;
 }
 
+#submit {
+    display: none;
+}
+
+#timer {
+    display: inline;
+    font-size: 30px;
+    padding-right: 70px;
+    padding-left: 70px;
+}

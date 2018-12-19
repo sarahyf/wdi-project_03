@@ -19,6 +19,8 @@ let taskName = "";
 let startTime = "";
 let endTime = "";
 
+var calculateTime = false;
+
 /*********Stopwatch*********/
 
 function stopwatch(element) {
@@ -153,15 +155,12 @@ window.onload = function() {
     submit = document.querySelector("#submit");
 
     var timer = document.getElementById("timer");
-    var toggleBtn = document.getElementById("toggle");
 
     startEndSelected = document.querySelector("#s_e");
     stopwatchSelected = document.querySelector("#stopwatch");
 
     var watch = null;
-    var calculateTime = false;
-
-
+   
 
     function toDB() {
         var time = new Date();
@@ -177,67 +176,40 @@ window.onload = function() {
         return format;
     }
 
-    
-
     if (startEndSelected) {
         startEndSelected.addEventListener("click", function (e) {
         document.querySelector("#select").style.display = "none";
         document.querySelector("#show_s_e").style.display = "inline";
+        document.querySelector("#submit").style.display = "inline";
+
             e.preventDefault();
         });
     }
 
     if (stopwatchSelected) {
-        calculateTime = true;
-
-        watch = new stopwatch(timer);
-
-        calculateTime = true;
-
         stopwatchSelected.addEventListener("click", function (e) {
+            watch = new stopwatch(timer);
             calculateTime = true;
             document.querySelector("#select").style.display = "none";
             document.querySelector("#show_stopwatch").style.display = "inline";
-            // watch = new stopwatch(timer);
+            document.querySelector("#submit").style.display = "inline";
 
-                // if (watch.isOn) {
-                //     endTime = watch.stop();
-                //     endTime = toDB(endTime);
-                // } else {
-                    watch.start();
-                    startTime = toDB();
-                // }
+            watch.start();
+            startTime = toDB();
 
             e.preventDefault();
             calculateTime = true;
         });
-        calculateTime = true;
     }
 
-    // if (toggleBtn) {
-    //     watch = new stopwatch(timer);
-
-    //     toggleBtn.addEventListener("click", function () {
-    //         calculateTime = true;
-    //         if (watch.isOn) {
-    //             endTime = watch.stop();
-    //             endTime = toDB(endTime);
-    //         } else {
-    //             startTime = watch.start();
-    //             startTime = toDB(startTime);
-    //         }
-    //     });
-    // }
-
     if(submit) {
-        console.log(calculateTime);
         submit.addEventListener("click", function(e) {
             if(calculateTime === true) {
                 watch.stop();
                 endTime = toDB();
-
                 addNewProject(projectName.value, taskName.value, startTime, endTime);
                 calculateTime = false;
+            
             } else {
                 getAllProjects();
             }
