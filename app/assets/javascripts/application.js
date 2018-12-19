@@ -27,40 +27,23 @@ function stopwatch(element) {
     var offset;
 
     function update() {
-        time += 1;
+        time += delta();
         var formatedTime = timeFormatter(time);
         element.innerHTML = formatedTime;
     }
 
-    // function delta() {
-    //     var now = Date.now();
-    //     var timePassed = now - offset;
-    //     offset = now;
-    //     return timePassed;
-    // }
+    function delta() {
+        var now = Date.now();
+        var timePassed = now - offset;
+        offset = now;
+        return timePassed;
+    }
 
-    // seconds 
-    // minutes = seconds * 60
-    // hours = minutes * 60
-
-    function timeFormatter(timeInSeconds) {
-        var hours = Math.floor(timeInSeconds / 60 / 60) % 60;
-        var minutes = Math.floor(timeInSeconds / 60) % 60;
-        var seconds = timeInSeconds % 60;
-
-        if (hours < 10) {
-            hours = "0" + hours;
-        }
-
-        if (minutes < 10) {
-            minutes = "0" + minutes;
-        }
-
-        if(seconds < 10) {
-            seconds = "0" + seconds;
-        }
-
-        // console.log(hours + ": " + minutes + ": " + seconds);
+    function timeFormatter() {
+        var time = new Date();
+        var hours = time.getHours().toString();
+        var minutes = time.getMinutes().toString();
+        var seconds = time.getSeconds().toString();
 
         return hours + ": " + minutes + ": " + seconds;
     }
@@ -162,57 +145,55 @@ window.onload = function() {
     endTime = document.querySelector("#endTime");
     submit = document.querySelector("#submit");
 
-    // var timer = document.getElementById("timer");
-    // var toggleBtn = document.getElementById("toggle");
+    var timer = document.getElementById("timer");
+    var toggleBtn = document.getElementById("toggle");
 
-    // function toDB(timeInSeconds) {
-    //     var hours = Math.floor(timeInSeconds / 60 / 60) % 60;
-    //     var minutes = Math.floor(timeInSeconds / 60) % 60;
-    //     var seconds = timeInSeconds % 60;
+    var calculateTime = false;
 
-    //     if (hours < 10) {
-    //         hours = "0" + hours;
-    //     }
+    function toDB() {
+        var time = new Date();
+        var year = time.getFullYear();
+        var month = time.getMonth();
+        var day = time.getDay();
+        var hours = time.getHours().toString();
+        var minutes = time.getMinutes().toString();
+        var seconds = time.getSeconds().toString();
 
-    //     if (minutes < 10) {
-    //         minutes = "0" + minutes;
-    //     }
+        var format = new Date(year, month, day, hours, minutes, seconds);
 
-    //     if (seconds < 10) {
-    //         seconds = "0" + seconds;
-    //     }
+        return format;
+    }
 
-    //     // console.log(hours + ": " + minutes + ": " + seconds);
+    var watch = null;
 
-    //     return hours + ": " + minutes + ": " + seconds;
-    // }
+    if (toggleBtn) {
+        watch = new stopwatch(timer);
 
-    // if (toggleBtn) {
-    //     var watch = new stopwatch(timer);
-
-    //     toggleBtn.addEventListener("click", function () {
-    //         if (watch.isOn) {
-    //             endTime = watch.stop();
-    //             // watch.stop();
-    //             console.log(endTime);
-    //             endTime = Date.now();
-    //             console.log(endTime);
-    //         } else {
-    //             // startTime = Date.now();
-    //             startTime = watch.start();
-    //             console.log(toDB(startTime));
-    //             startTime = Date.now();
-    //             console.log(startTime);
-    //         }
-    //     });
-    // }
+        toggleBtn.addEventListener("click", function () {
+            calculateTime = true;
+            if (watch.isOn) {
+                endTime = watch.stop();
+                endTime = toDB(endTime);
+            } else {
+                startTime = watch.start();
+                startTime = toDB(startTime);
+            }
+        });
+    }
 
     if(submit) {
         submit.addEventListener("click", function(e) {
-            // getAllProjects();
+            if(calculateTime == true) {
+                endTime = watch.stop();
+                endTime = toDB(endTime);
 
-            addNewProject(projectName.value, taskName.value, startTime.value, endTime.value);
-
+                addNewProject(projectName.value, taskName.value, startTime, endTime);
+                calculateTime = false;
+            } else {
+                
+                
+                getAllProjects();
+            }
         });
     }
 };

@@ -2,7 +2,7 @@
 
 <div class="links">
 <p><%= link_to "Report", tasks_path %></p>
-<p><%= link_to "Log Out", destroy_user_session_path, method: :delete %></p>
+<p id="logout"><%= link_to "Logout", destroy_user_session_path, method: :delete %></p>
 </div>
 
 <div id="create_task">
@@ -28,7 +28,9 @@
     <% minutes = 0 %>
     <% seconds = 0  %>
 
-    <% current_user.tasks.each do |t| %>
+    <% ordered_tasks = current_user.tasks.sort_by &:created_at %>
+
+    <% ordered_tasks.each do |t| %>
         <% tasks_array.push(t) %>
     <% end %>
 
@@ -36,7 +38,7 @@
     
     <% while tasks_array.empty? == false %>
 
-   <% if seconds.to_i >= 60 %>
+    <% if seconds.to_i >= 60 %>
         <% rest = seconds.to_i %>
         <% seconds.to_i = seconds.to_i - 60 %>
         <% rest = rest - seconds.to_i %>
