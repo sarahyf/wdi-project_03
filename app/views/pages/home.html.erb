@@ -68,7 +68,7 @@
 
     <% if (tasks_array[0].created_at.strftime "%B %d, %Y") == (Date.today.strftime "%B %d, %Y") %>
         <p class="day">Today</p>
-    <% elsif (tasks_array[0].created_at.strftime "%B %d, %Y") == ((Date.today - 1).strftime "%B %d, %Y") %>
+    <% elsif (tasks_array[0].created_at.strftime "%A, %B %d, %Y") == ((Date.today - 1).strftime "%B %d, %Y") %>
         <p class="day">Yesterday</p>
     <% else %>
         <p class="day"><%= tasks_array[0].created_at.strftime "%B %d, %Y" %></p>
